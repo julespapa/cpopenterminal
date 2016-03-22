@@ -65,6 +65,7 @@
 			buildPhases = (
 				3BE31F711CA109020027CC75 /* Sources */,
 				3BE31F721CA109020027CC75 /* Resources */,
+				3BACB15D1CA134D500F7D49A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -117,6 +118,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3BACB15D1CA134D500F7D49A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "XCODEUUID=`defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID`\nfor f in ~/Library/Application\\ Support/Developer/Shared/Xcode/Plug-ins/\\*;\ndo defaults write \"$f/Contents/Info\" DVTPlugInCompatibilityUUIDs -array-add $XCODEUUID; done\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3BE31F711CA109020027CC75 /* Sources */ = {
@@ -257,6 +274,7 @@
 				3BE31F831CA109020027CC75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
