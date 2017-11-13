@@ -11,15 +11,15 @@ var sharedPlugin: CPOpenTerminal?
 
 class CPOpenTerminal: NSObject {
 
-    var bundle: NSBundle
-    lazy var center = NSNotificationCenter.defaultCenter()
+    var bundle: Bundle
+    lazy var center = NotificationCenter.default
 
-    init(bundle: NSBundle) {
+    init(bundle: Bundle) {
         self.bundle = bundle
 
         super.init()
         print(bundle)
-        center.addObserver(self, selector: Selector("createMenuItems"), name: NSApplicationDidFinishLaunchingNotification, object: nil)
+        center.addObserver(self, selector: Selector(("createMenuItems")), name: NSApplication.didFinishLaunchingNotification, object: nil)
     }
 
     deinit {
@@ -32,12 +32,12 @@ class CPOpenTerminal: NSObject {
 
     func getXCodeProjectPath() -> String {
         if let anyClass = NSClassFromString("IDEWorkspaceWindowController") as? NSObject.Type {
-            let workspaceWindowControllers = anyClass.valueForKey("workspaceWindowControllers") as! [AnyObject]
+            let workspaceWindowControllers = anyClass.value(forKey: "workspaceWindowControllers") as! [AnyObject]
             for controller in workspaceWindowControllers {
-                if controller.valueForKey("window")!.isEqual(NSApp.keyWindow) {
-                    if let workSpace = controller.valueForKey("_workspace"),
-                        let filePath = workSpace.valueForKey("representingFilePath"),
-                        let pathString = filePath.valueForKey("_pathString")
+                if (controller.value(forKey: "window")! as AnyObject).isEqual(NSApp.keyWindow) {
+                    if let workSpace = controller.value(forKey: "_workspace"),
+                        let filePath = (workSpace as AnyObject).value(forKey: "representingFilePath"),
+                        let pathString = (filePath as AnyObject).value(forKey: "_pathString")
                     {
                         return pathString as! String
                     }
@@ -49,12 +49,13 @@ class CPOpenTerminal: NSObject {
     
     func createMenuItems() {
         removeObserver()
-        let item = NSApp.mainMenu!.itemWithTitle("Window")
+        let item = NSApp.mainMenu!.item(withTitle: "Window")
         if item != nil {
-            let actionMenuItem = NSMenuItem(title:"Open Terminal", action:"doMenuAction", keyEquivalent:"l")
-            actionMenuItem.keyEquivalentModifierMask = Int(NSEventModifierFlags.CommandKeyMask.rawValue | NSEventModifierFlags.ControlKeyMask.rawValue)
+            
+            let actionMenuItem = NSMenuItem(title:"Open Terminal", action:Selector(("doMenuAction")), keyEquivalent:"l")
+            actionMenuItem.keyEquivalentModifierMask = [.command, .control]
             actionMenuItem.target = self
-            item!.submenu!.addItem(NSMenuItem.separatorItem())
+            item!.submenu!.addItem(NSMenuItem.separator())
             item!.submenu!.addItem(actionMenuItem)
         }
     }
